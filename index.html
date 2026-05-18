@@ -398,10 +398,14 @@ contenteditable="true">
 </div>
 
 <div class="note">
-Use:
-&lt;b&gt;text&lt;/b&gt; for bold,
-&lt;i&gt;text&lt;/i&gt; for italic,
-&lt;u&gt;text&lt;/u&gt; for underline.
+    
+    Use: *text* = Bold , 
+    _text_ = Italic,
+    _u_text_u_ = Underline,
+    *r*text*r* = Right Side,
+    *l*text*l* = Left Side,
+    - text = Dot Point
+    
 </div>
 
 </div>
@@ -650,27 +654,32 @@ document.getElementById("dateText")
 
 /* CONTENT */
 
-let text =
-document.getElementById("editor")
-.innerText;
+let text = document.getElementById("editor").innerText;
 
-text = text
-.replace(/<b>(.*?)<\/b>/g,'<b>$1</b>')
-.replace(/<i>(.*?)<\/i>/g,'<i>$1</i>')
-.replace(/<u>(.*?)<\/u>/g,'<u>$1</u>')
-.replace(/<c>(.*?)<\/c>/g,
-        '<div style="text-align:center;">$1</div>')
-    
-    .replace(/<r>(.*?)<\/r>/g,
-        '<div style="text-align:right;">$1</div>')
-    
-    .replace(/<l>(.*?)<\/l>/g,
-        '<div style="text-align:left;">$1</div>')
-.replace(/\n/g,"<br>");
+/* UNDERLINE */
+text = text.replace(/_u_(.*?)_u_/g, "<u>$1</u>");
 
-document.getElementById("contentPreview")
-.innerHTML = text;
+/* RIGHT ALIGN */
+text = text.replace(/\*r\*(.*?)\*r\*/g,
+    '<div style="text-align:right">$1</div>');
 
+/* LEFT ALIGN */
+text = text.replace(/\*l\*(.*?)\*l\*/g,
+    '<div style="text-align:left">$1</div>');
+
+/* BOLD */
+text = text.replace(/\*(.*?)\*/g, "<b>$1</b>");
+
+/* ITALIC */
+text = text.replace(/_(.*?)_/g, "<i>$1</i>");
+
+/* DOT BULLET */
+text = text.replace(/^- (.*)$/gm, '• $1');
+
+/* NEW LINE */
+text = text.replace(/\n/g, "<br>");
+
+document.getElementById("contentPreview").innerHTML = text;
 }
 
 /* =========================

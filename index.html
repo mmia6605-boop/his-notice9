@@ -269,12 +269,15 @@ cursor:pointer;
 /* =========================
 A4 PAGE
 ========================= */
-
+.pageWrapper {
+  overflow-x: auto;
+  width: 100%;
+}
 .page{
 width:794px;
 height:1123px;
 margin:auto;
-background:white;
+background:#FFFFFF !important;
 position:relative;
 overflow:hidden;
 box-shadow:0 20px 40px rgba(0,0,0,.3);
@@ -389,18 +392,90 @@ z-index:10;
 }
 
 /* =========================
-MOBILE
+PROFESSIONAL MOBILE UI
 ========================= */
 
-@media(max-width:850px){
-
-.grid{
-grid-template-columns:1fr;
-}
-
-.page{
-width:100%;
-height:auto;
+@media (max-width:850px) {
+  
+  body {
+    background: #f3f4f6;
+    padding: 10px;
+  }
+  
+  .controls,
+  .history {
+    padding: 15px;
+    border-radius: 15px;
+  }
+  
+  .controls h2 {
+    font-size: 24px;
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .editor {
+    height: 250px;
+    font-size: 16px;
+  }
+  
+  input,
+  select {
+    height: 48px;
+    font-size: 16px;
+  }
+  
+  .page {
+    width: 794px;
+    height: 1123px;
+    transform: scale(.42);
+    transform-origin: top center;
+    margin-bottom: -650px;
+  }
+  
+  .buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: #fff;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, .15);
+    z-index: 9999;
+  }
+  
+  .buttons button {
+    margin: 0;
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .historyItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .historyBtns {
+    width: 100%;
+    display: flex;
+  }
+  
+  .historyBtns button {
+    flex: 1;
+  }
+  
+  .addAuthorityBtn {
+    font-size: 16px;
+    padding: 14px;
+  }
+  
 }
 
 }
@@ -602,17 +677,11 @@ PDF
 
 </div>
 
-<!-- HISTORY -->
-
-<div class="history">
-
-<h2>📚 Notice Templates</h2>
-
-<div id="historyList"></div>
-
-</div>
 
 <!-- A4 PAGE -->
+
+<div
+<div class="pageWrapper">
 
 <div
 class="page"
@@ -635,7 +704,7 @@ An Ideal English and Arabic Medium Institution
 </div>
 
 <div class="schoolAddress">
-Manikpur, Dafahat, Suti, Murshidabad, 742201
+Manikpur, Dafahat, Suti, MSD, 742201
 </div>
 
 <div
@@ -658,6 +727,17 @@ Date:
 class="content"
 id="contentPreview"></div>
 
+</div>
+</div>
+
+<!-- HISTORY -->
+
+<div class="history">
+  
+  <h2>📚 Notice Templates</h2>
+  
+  <div id="historyList"></div>
+  
 </div>
 
 <script>
@@ -1577,7 +1657,7 @@ async function downloadPDF() {
       {
         scale: scale,
         useCORS: true,
-        backgroundColor: "#ffffff"
+          backgroundColor: "#ffffff"
       }
       
     )
@@ -1585,10 +1665,7 @@ async function downloadPDF() {
     .then(canvas => {
       
       let imgData =
-        canvas.toDataURL(
-          "image/jpeg",
-          quality
-        );
+  canvas.toDataURL("image/png");
       
       let pdf =
         new jsPDF({
@@ -1603,26 +1680,20 @@ async function downloadPDF() {
       /* SINGLE PAGE */
       
       pdf.addImage(
-        
-        imgData,
-        
-        "JPEG",
-        
-        0,
-        
-        0,
-        
-        210,
-        
-        297,
-        
-        undefined,
-        
-        highQuality ?
-        "FAST" :
-        "MEDIUM"
-        
-      );
+  
+  imgData,
+  
+  "PNG",
+  
+  0,
+  
+  0,
+  
+  210,
+  
+  297
+  
+);
       
       pdf.save(
         

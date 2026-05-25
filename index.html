@@ -593,6 +593,10 @@ Controller of Exams
 School Seal
 </option>
 
+<option value="image">
+  Custom Image
+</option>
+
 </select>
 
 <button
@@ -619,6 +623,12 @@ Footer Area
 
 </select>
 
+<input
+type="file"
+id="imageUpload"
+accept="image/*"
+style="display:none">
+
 <div class="moveButtons">
 
 <button onclick="moveElement(0,-10)">
@@ -642,6 +652,24 @@ Footer Area
 </div>
 
 <!-- ACTION BUTTONS -->
+
+<div class="moveBox" style="display:block">
+  
+  <h3>Image Zoom</h3>
+  
+  <div class="moveButtons">
+    
+    <button onclick="resizeSelected(20)">
+      ➕ Zoom In
+    </button>
+    
+    <button onclick="resizeSelected(-20)">
+      ➖ Zoom Out
+    </button>
+    
+  </div>
+  
+</div>
 
 <div class="buttons">
 
@@ -1018,6 +1046,49 @@ el.style.left =
 }
 
 /* =========================
+IMAGE ZOOM
+========================= */
+
+function resizeSelected(change) {
+  
+  let selected =
+    document
+    .getElementById(
+      "selectedElement"
+    )
+    .value;
+  
+  if (
+    selected === "footerArea"
+  ) return;
+  
+  let el =
+    document
+    .getElementById(
+      selected
+    );
+  
+  if (!el) return;
+  
+  let width =
+    parseInt(
+      window
+      .getComputedStyle(el)
+      .width
+    );
+  
+  width =
+    width + change;
+  
+  if (width < 30)
+    width = 30;
+  
+  el.style.width =
+    width + "px";
+  
+}
+
+/* =========================
 MOVE OPTIONS
 ========================= */
 
@@ -1059,6 +1130,20 @@ let value =
 document.getElementById(
 "authoritySelect"
 ).value;
+
+/* CUSTOM IMAGE */
+
+if (value === "image") {
+  
+  document
+    .getElementById(
+      "imageUpload"
+    )
+    .click();
+  
+  return;
+  
+}
 
 let page =
 document.getElementById(
@@ -1203,6 +1288,73 @@ block
 }
 
 /* =========================
+CUSTOM IMAGE
+========================= */
+
+document
+  .getElementById(
+    "imageUpload"
+  )
+  
+  .addEventListener(
+    "change",
+    function() {
+      
+      let file = this.files[0];
+      
+      if (!file) return;
+      
+      let reader =
+        new FileReader();
+      
+      reader.onload =
+        function(e) {
+          
+          let img =
+            document.createElement(
+              "img"
+            );
+          
+          let id =
+            "image" +
+            Date.now();
+          
+          img.id = id;
+          
+          img.src =
+            e.target.result;
+          
+          img.className =
+            "dynamicElement";
+          
+          img.style.left =
+            "250px";
+          
+          img.style.top =
+            "350px";
+          
+          img.style.width =
+            "180px";
+          
+          document
+            .getElementById(
+              "page"
+            )
+            .appendChild(img);
+          
+          addMoveOption(
+            id,
+            "Custom Image"
+          );
+          
+        };
+      
+      reader.readAsDataURL(file);
+      
+    }
+  );
+
+/* =========================
 SAVE
 ========================= */
 
@@ -1222,16 +1374,34 @@ authorities.push({
 
 id:el.id,
 
-html:el.innerHTML,
+tag:
+el.tagName,
 
-top:el.style.top,
+src:
+el.src||"",
 
-left:el.style.left,
+html:
+el.innerHTML,
 
-width:el.style.width,
+top:
+window
+.getComputedStyle(el)
+.top,
+
+left:
+window
+.getComputedStyle(el)
+.left,
+
+width:
+window
+.getComputedStyle(el)
+.width,
 
 textAlign:
-el.style.textAlign
+window
+.getComputedStyle(el)
+.textAlign
 
 });
 
@@ -1480,6 +1650,46 @@ if(item.authorities){
 
 item.authorities
 .forEach(data=>{
+
+if (data.tag === "IMG") {
+  
+  let img =
+    document.createElement(
+      "img"
+    );
+  
+  img.id =
+    data.id;
+  
+  img.src =
+    data.src;
+  
+  img.className =
+    "dynamicElement";
+  
+  img.style.top =
+    data.top;
+  
+  img.style.left =
+    data.left;
+  
+  img.style.width =
+    data.width;
+  
+  document
+    .getElementById(
+      "page"
+    )
+    .appendChild(img);
+  
+  addMoveOption(
+    data.id,
+    "Custom Image"
+  );
+  
+  return;
+  
+}
 
 let div=
 document

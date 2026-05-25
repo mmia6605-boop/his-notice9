@@ -653,7 +653,10 @@ style="display:none">
 
 <!-- ACTION BUTTONS -->
 
-<div class="moveBox" style="display:block">
+<div
+class="moveBox"
+id="imageZoomBox"
+style="display:none">
   
   <h3>Image Zoom</h3>
   
@@ -797,6 +800,7 @@ const db = firebase.firestore();
 
 let editId = null;
 let signatureCount = 0;
+let imageCount = 0;
 
 /* =========================
 LIVE EVENTS
@@ -1275,8 +1279,8 @@ ${designation}
 `;
 
 addMoveOption(
-id,
-designation
+  id,
+  designation + " (" + id + ")"
 );
 
 }
@@ -1315,9 +1319,11 @@ document
               "img"
             );
           
+          imageCount++;
+
           let id =
-            "image" +
-            Date.now();
+          "image" +
+          imageCount;
           
           img.id = id;
           
@@ -1343,11 +1349,16 @@ document
             .appendChild(img);
           
           addMoveOption(
-            id,
-            "Custom Image"
-          );
-          
-        };
+  id,
+  "Custom Image " + imageCount
+);
+          document
+          .getElementById(
+           "imageZoomBox"
+          )
+          .style.display =
+          "block";
+          };
       
       reader.readAsDataURL(file);
       
@@ -1686,7 +1697,12 @@ if (data.tag === "IMG") {
     data.id,
     "Custom Image"
   );
-  
+  document
+  .getElementById(
+    "imageZoomBox"
+  )
+  .style.display =
+  "block";
   return;
   
 }
@@ -1724,9 +1740,33 @@ document
 )
 .appendChild(div);
 
+let label = data.id;
+
+if (data.id.startsWith("signature")) {
+  label = "Signature (" + data.id + ")";
+}
+
+if (data.id === "sealArea") {
+  label = "School Seal";
+}
+
+if (data.id.startsWith("image")) {
+  
+  let num =
+    data.id.replace(
+      "image",
+      ""
+    );
+  
+  label =
+    "Custom Image " +
+    num;
+  
+}
+
 addMoveOption(
-data.id,
-data.id
+  data.id,
+  label
 );
 
 });
